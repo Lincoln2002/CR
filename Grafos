@@ -1,0 +1,46 @@
+import networkx as nx
+import random
+import time
+
+def create_random_graph(nodes, edges):
+    G = nx.Graph()
+    G.add_nodes_from(range(nodes))
+    for i in range(edges):
+        node1, node2 = random.sample(range(nodes), 2)
+        G.add_edge(node1, node2)
+    return G
+
+def union_tree(graph):
+    return nx.minimum_spanning_tree(graph)
+
+def union_simple(graph, target_node):
+    # União de todos os nós com um nó específico (target_node)
+    for node in graph.nodes:
+        if node != target_node:
+            graph.add_edge(node, target_node)
+    return graph
+
+def main():
+    num_nodes = 100000
+    num_edges = 150000
+
+    # Criar um grafo aleatório
+    random_graph = create_random_graph(num_nodes, num_edges)
+
+    # Escolher um nó específico para a união simples
+    target_node = random.choice(list(random_graph.nodes))
+
+    # Medir o tempo de execução da união usando topologia em árvore
+    start_time = time.time()
+    tree = union_tree(random_graph.copy())  # Copy para manter o grafo original inalterado
+    end_time = time.time()
+    print(f"Tempo de execução da união usando topologia em árvore: {end_time - start_time:.6f} segundos")
+
+    # Medir o tempo de execução da união simples
+    start_time1 = time.time()
+    simple_union_graph = union_simple(random_graph.copy(), target_node)  # Copy para manter o grafo original inalterado
+    end_time1 = time.time()
+    print(f"Tempo de execução da união simples: {end_time1 - start_time1:.15f} segundos")
+
+
+main()
